@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Registration;
 use Illuminate\Http\Request;
+use App\Models\Event; 
+use App\Mail\EventRegistered; 
+use Illuminate\Support\Facades\Mail; 
+use Exception; 
+use Illuminate\Support\Facades\Log;
 
 class RegistrationController extends Controller
 {
@@ -28,7 +33,28 @@ class RegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user_id = auth()->id(); 
+        $event_id = $request->event_id;
+        // Check if already registered 
+        $exists = Registration::where('user_id', $user_id)->where('event_id', $event_id)->exists(); 
+        if ($exists) 
+        { 
+            return back()->with('error', 'You are already registered for this event.'); 
+        }
+        // Create registration 
+        Registration::create([ 'user_id' => $user_id, 'occasion_id' => $event_id, ]); 
+        
+        $event = Event::findOrFail($event_id); 
+
+        try { 
+            Mail::to($request->user())->send(new EventRegistered($event)); 
+        } 
+        catch (Exception $e) { 
+            Log::error('Email sending failed: ' . $e->getMessage()); 
+            return back()->with('error', 'Failed to send email.'); 
+        } 
+        
+        return back()->with('success', 'Registration successful.');
     }
 
     /**
@@ -60,6 +86,15 @@ class RegistrationController extends Controller
      */
     public function destroy(Registration $registration)
     {
-        //
+        $registration = Registration::findOrFail($registrationId); 
+        // Optional: Check if the authenticated user is the one who made the registration 
+        if ($registration->user_id !== auth()->id()) 
+        { 
+            return back()->with('error', 'You do not have permission to cancel this registration.'); 
+        } 
+        
+        $registration->delete(); 
+        return back()->with('success', 'Registration canceled successfully.'); 
+
     }
 }
