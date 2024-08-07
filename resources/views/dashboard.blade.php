@@ -1,15 +1,24 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                        My Events
+                    </h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                        @forelse ($userOccasions as $occasion)
+                            <a href="{{ route('occasions.show', $occasion->id) }}" class="bg-white rounded-lg shadow-lg overflow-hidden block hover:bg-gray-50 transition duration-150 ease-in-out">
+                                <div class="p-6">
+                                    <h3 class="font-bold text-lg mb-2">{{ $occasion->title }}</h3>
+                                    <p class="text-gray-600 text-sm mb-4">Date: {{ $occasion->date->format('F d, Y') }}</p>
+                                    <p class="text-gray-600 text-sm">Location: {{ $occasion->location }}</p>
+                                </div>
+                            </a>
+                        @empty
+                            <p>You have not created any events yet.</p>
+                        @endforelse
+                    </div>
                 </div>
             </div>
         </div>
