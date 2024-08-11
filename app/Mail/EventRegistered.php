@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Registration;
+use App\Models\Event;
 
 class EventRegistered extends Mailable
 {
@@ -17,7 +17,7 @@ class EventRegistered extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(protected Registration $event,) { }
+    public function __construct(protected Event $event,) { }
 
 
     /**
@@ -26,7 +26,7 @@ class EventRegistered extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Event Registered',
+            subject: 'Registration confirmed',
         );
     }
 

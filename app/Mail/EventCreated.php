@@ -40,7 +40,7 @@ class EventCreated extends Mailable
                 'title' => $this->event->title, 
                 'date' => $this->event->date->format('F j, Y'), 
                 'location' => $this->event->location, 
-                'EventID' => $this->event->id, 
+                'eventID' => $this->event->id, 
                 ], 
                 
         );

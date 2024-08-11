@@ -1,10 +1,13 @@
 <x-mail::message>
-# Introduction
 
-The body of your message.
+# You have registered for {{ $title }}
 
-<x-mail::button :url="''">
-Button Text
+**Date:** {{ $date }}
+
+**Location:** {{ $location }}
+
+<x-mail::button :url="config('app.url') . '/events/' . $eventID ">
+Event Page
 </x-mail::button>
 
 Thanks,<br>

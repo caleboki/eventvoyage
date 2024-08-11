@@ -47,16 +47,15 @@ class EventController extends Controller
            'time' => 'required', 
            'location' => 'required|string|max:255', ]));
            
-           $event = $request->user()->events()->create($validated); 
-           try { 
-               Mail::to($request->user())->send(new EventCreated($event)); 
-           } catch (Exception $e) { 
-           Log::error('Email sending failed: ' . $e->getMessage()); 
-           return back()->with('error', 'Failed to send email.'); 
-           }
-           
-           
-           return redirect(route('events.index'));
+        $event = $request->user()->events()->create($validated); 
+        try { 
+            Mail::to($request->user())->send(new EventCreated($event)); 
+        } catch (Exception $e) { 
+        Log::error('Email sending failed: ' . $e->getMessage()); 
+        return back()->with('error', 'Failed to send email.'); 
+        }
+        
+        return redirect(route('events.index'));
            
     }
 
