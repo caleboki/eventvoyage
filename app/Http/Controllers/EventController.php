@@ -51,11 +51,11 @@ class EventController extends Controller
         try { 
             Mail::to($request->user())->send(new EventCreated($event)); 
         } catch (Exception $e) { 
-        Log::error('Email sending failed: ' . $e->getMessage()); 
-        return back()->with('error', 'Failed to send email.'); 
+            Log::error('Email sending failed: ' . $e->getMessage()); 
+            return back()->with('error', 'Failed to send email.'); 
         }
         
-        return redirect(route('events.index'));
+        return redirect()->route('events.index')->with('success', 'Event created successfully!');
            
     }
 
